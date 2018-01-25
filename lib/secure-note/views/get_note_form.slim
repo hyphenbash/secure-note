@@ -1,0 +1,13 @@
+.container
+  .row
+    h1 = "Note: \"#{@note.title}\""
+
+  .row
+    .col-xs-5
+      form method='POST' action="/secure-notes/#{@note.id}" role='form'
+        .form-group
+          label.control-label for='password' Password
+          input.form-control id='password' type='password' name='password' placeholder='Password'
+
+        button.btn.btn-primary type='submit' Submit
+        button.btn.btn-default type='reset' Reset

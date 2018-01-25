@@ -1,0 +1,19 @@
+.container
+  .row
+    h1 Notes
+
+    table.table-bordered.table-striped.table-responsive.table-hover.table-condensed
+      thead
+        tr
+          th Title
+          th Action
+
+      tbody
+        - @notes.each do |note|
+          tr
+            td.col-xs-6 = note.title.titleize
+            td.col-xs-2
+              ul.list-unstyled
+                li: a.btn.btn-info href="/secure-notes/#{note.id}" View Note
+                br
+                li: a.btn.btn-warning href="/secure-notes/#{note.id}/edit" Edit Note

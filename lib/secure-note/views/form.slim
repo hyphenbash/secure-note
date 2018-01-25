@@ -1,0 +1,16 @@
+.col-xs-5
+  form method='POST' action='/secure-notes' role='form'
+    .form-group
+      label.control-label for='title' Title
+      input.form-control id='title' name='title' placeholder='Title'
+
+    .form-group
+      label.control-label for='note' Note
+      textarea.form-control id='note' rows=5 name='body_text' placeholder='Note'
+
+    .form-group
+      label.control-label for='password' Password
+      input.form-control id='password' type='password' name='password' placeholder='Password'
+
+    button.btn.btn-primary type='submit' Submit
+    button.btn.btn-default type='reset' Reset

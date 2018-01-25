@@ -1,0 +1,8 @@
+<%= ENV['RACK_ENV'] %>:
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database: <%= "secure_note_#{ENV['RACK_ENV']}" %>
+  host: <%= ENV['DB_HOST'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>

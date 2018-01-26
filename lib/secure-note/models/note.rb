@@ -1,9 +1,9 @@
 class Note < ActiveRecord::Base
   attr_accessor :body_text
 
-  has_secure_password
-
   before_create :check_notes_directory
+
+  has_secure_password
 
   def save_to_file!
     save!

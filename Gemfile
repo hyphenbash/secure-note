@@ -13,4 +13,13 @@ gem 'slim'
 group :development, :test do
   gem 'rack-test'
   gem 'rspec'
+  gem 'factory_bot', '~> 4.0'
+  gem 'fakefs'
+  gem 'database_cleaner'
+  gem 'simplecov'
+end
+
+group :test do
+  gem 'capybara', '~> 2.13'
+  gem 'poltergeist'
 end

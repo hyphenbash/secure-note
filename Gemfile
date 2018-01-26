@@ -20,6 +20,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'capybara', '~> 2.13'
+  gem 'capybara'
   gem 'poltergeist'
 end

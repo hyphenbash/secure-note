@@ -1,5 +1,6 @@
 <%= ENV['RACK_ENV'] %>:
   adapter: postgresql
+  min_messages: WARNING
   encoding: unicode
   pool: 5
   database: <%= "secure_note_#{ENV['RACK_ENV']}" %>

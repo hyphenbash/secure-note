@@ -14,12 +14,12 @@ ActiveRecord::Schema.define(version: 20180125110807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pgcrypto"
   enable_extension "uuid-ossp"
+  enable_extension "pgcrypto"
 
   create_table "notes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
-    t.string "password_digest"
+    t.string "title", null: false
+    t.string "password_digest", null: false
   end
 
 end

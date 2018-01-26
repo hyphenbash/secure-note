@@ -28,14 +28,14 @@ bundle install
 #### Database
 
 Database is created to maintain record of uuid as well as persisting password digests to retrieve notes from the file system later on.
-However, note text is not recorded to the database, rather as a .txt file system matching their filenames to the id column in the database
+However, note text is not recorded to the database, rather as a .txt filesystem name associated to the id column in the database
 
 ```shell 
 rake db:create
 rake db:migrate
 ```
 
-#### Run
+## Run
 
 ```shell
 rackup -p 8080

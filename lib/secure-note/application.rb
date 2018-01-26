@@ -1,4 +1,5 @@
 require 'dotenv/load'
+require 'sinatra'
 require 'sinatra/base'
 require 'sinatra/contrib'
 require 'sinatra/activerecord'
@@ -42,12 +43,12 @@ module SecureNote
     end
 
     get '/secure-notes/:id' do
-      @note = Note.find(params[:id])
+      set_note
       slim :get_note_form
     end
 
     post '/secure-notes/:id' do
-      @note = Note.find(params[:id])
+      set_note
 
       respond_to do |f|
         if @note && @note.authenticate(params[:password])
@@ -59,6 +60,10 @@ module SecureNote
     end
 
     private
+
+    def set_note
+      @note = Note.find(params[:id])
+    end
 
     def permit_params(*permitted_params)
       params.select { |param| permitted_params.include? param.to_sym }

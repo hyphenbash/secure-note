@@ -1,5 +1,12 @@
 .container
   .row
+    - if @note.errors.any?
+      .alert.alert-danger
+        ul
+          - @note.errors.full_messages.each do |error|
+            li = error
+
+  .row
     h1 = "Note: \"#{@note.title}\""
 
   .row

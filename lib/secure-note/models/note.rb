@@ -5,6 +5,9 @@ class Note < ActiveRecord::Base
   before_save :save_to_file!, :set_encryption_values
   after_rollback :destroy_saved_file!
 
+  validates :title, :presence => true
+  validates :body_text, :presence => true
+
   has_secure_password
 
   def protected_body_text

@@ -34,11 +34,12 @@ module SecureNote
       @note = Note.new(note_params)
 
       respond_to do |f|
-        if @note.save!
-          f.html { redirect "/secure-notes/#{@note.uuid}" }
-          f.json { @note }
+        if @note.save
+          f.html { status :created; slim :get_note_form }
+          f.json { @note.to_json }
         else
-          f.html { redirect '/secure-notes/new' }
+          f.html { slim :new }
+          f.json { @note.errors.to_json }
         end
       end
     end
@@ -54,8 +55,10 @@ module SecureNote
       respond_to do |f|
         if @note && @note.authenticate(params[:password])
           f.html { slim :note }
+          f.json { @note.to_json }
         else
-          f.html { slim :get_note_form }
+          f.html { status :unauthorized; slim :get_note_form }
+          f.json { @note.errors.to_json }
         end
       end
     end

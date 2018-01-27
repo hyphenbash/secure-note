@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+require 'pp'
+
 gem 'rake'
 gem 'dotenv'
 gem 'bcrypt', '~> 3.1.7'
@@ -14,7 +16,7 @@ group :development, :test do
   gem 'rack-test'
   gem 'rspec'
   gem 'factory_bot', '~> 4.0'
-  gem 'fakefs'
+  gem 'fakefs', require: 'fakefs/safe'
   gem 'database_cleaner'
   gem 'simplecov'
 end

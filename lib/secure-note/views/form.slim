@@ -1,3 +1,9 @@
+- if @note.errors.any?
+  .alert.alert-danger
+    ul
+      - @note.errors.full_messages.each do |error|
+        li = error
+
 .col-xs-5
   form method='POST' action='/secure-notes' role='form'
     .form-group

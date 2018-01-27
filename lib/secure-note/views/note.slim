@@ -1,5 +1,8 @@
 .container
   .row
-    h1 = "Note: \"#{@note.title}\""
+    h3 Note Title
+    p = @note.title
 
-  .row = @note.protected_body_text
+  .row
+    h3 Note Body
+    p = @note.protected_body_text

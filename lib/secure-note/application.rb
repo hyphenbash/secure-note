@@ -1,4 +1,5 @@
 require 'dotenv/load'
+require 'securerandom'
 require 'sinatra'
 require 'sinatra/base'
 require 'sinatra/contrib'
@@ -33,8 +34,8 @@ module SecureNote
       @note = Note.new(note_params)
 
       respond_to do |f|
-        if @note.save_to_file!
-          f.html { redirect "/secure-notes/#{@note.id}" }
+        if @note.save!
+          f.html { redirect "/secure-notes/#{@note.uuid}" }
           f.json { @note }
         else
           f.html { redirect '/secure-notes/new' }
@@ -42,12 +43,12 @@ module SecureNote
       end
     end
 
-    get '/secure-notes/:id' do
+    get '/secure-notes/:uuid' do
       set_note
       slim :get_note_form
     end
 
-    post '/secure-notes/:id' do
+    post '/secure-notes/:uuid' do
       set_note
 
       respond_to do |f|
@@ -62,7 +63,7 @@ module SecureNote
     private
 
     def set_note
-      @note = Note.find(params[:id])
+      @note = Note.find_by(uuid: params[:uuid])
     end
 
     def permit_params(*permitted_params)
@@ -71,6 +72,7 @@ module SecureNote
 
     def note_params
       permit_params(
+          :uuid,
           :title,
           :body_text,
           :password

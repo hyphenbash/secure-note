@@ -14,6 +14,6 @@
             td.col-xs-6 = note.title.titleize
             td.col-xs-2
               ul.list-unstyled
-                li: a.btn.btn-info href="/secure-notes/#{note.id}" View Note
+                li: a.btn.btn-info href="/secure-notes/#{note.uuid}" View Note
                 br
-                li: a.btn.btn-warning href="/secure-notes/#{note.id}/edit" Edit Note
+                li: a.btn.btn-warning href="/secure-notes/#{note.uuid}/edit" Edit Note

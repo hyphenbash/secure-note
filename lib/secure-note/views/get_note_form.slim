@@ -4,7 +4,7 @@
 
   .row
     .col-xs-5
-      form method='POST' action="/secure-notes/#{@note.id}" role='form'
+      form method='POST' action="/secure-notes/#{@note.uuid}" role='form'
         .form-group
           label.control-label for='password' Password
           input.form-control id='password' type='password' name='password' placeholder='Password'

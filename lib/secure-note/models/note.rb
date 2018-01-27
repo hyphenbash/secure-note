@@ -1,39 +1,53 @@
 class Note < ActiveRecord::Base
   attr_accessor :body_text
 
-  before_create :notes_directory
+  after_initialize :set_default_values
+  before_save :save_to_file!, :set_encryption_values
+  after_rollback :destroy_saved_file!
 
   has_secure_password
 
-  def save_to_file!
-    save!
-
-    @adapter.write_to_file!
-
-  rescue @adapter.class::ApiError => exc
-    logger.error "#{exc.class}: #{exc.message}\n\n#{exc.backtrace.join("\n")}"
-    nil
-  end
-
   def protected_body_text
-    @adapter.read_from_file!
+    adapter.read_from_file!
 
-  rescue @adapter.class::ApiError => exc
+  rescue adapter.class::ApiError => exc
     logger.error "#{exc.class}: #{exc.message}\n\n#{exc.backtrace.join("\n")}"
     nil
   end
 
   private
 
-  def notes_directory
-    adapter.check_notes_directory
+  def save_to_file!
+    adapter.write_to_file!
+
+  rescue adapter.class::ApiError => exc
+    logger.error "#{exc.class}: #{exc.message}\n\n#{exc.backtrace.join("\n")}"
+    nil
+  end
+
+  def destroy_saved_file!
+    adapter.remove_file!
+  end
+
+  def set_default_values
+    self.uuid ||= SecureRandom.uuid
+  end
+
+  def set_encryption_values
+    self.body_text_iv ||= adapter.cipher_iv
+    self.body_text_key ||= adapter.cipher_key
   end
 
   def adapter
-    @adapter ||= FileEncryptionAdapter.new(note_uuid, body_text)
+    @adapter ||= FileEncryptionAdapter.new(adapter_options)
   end
 
-  def note_uuid
-    self.id
+  def adapter_options
+    opts = {}
+    opts[:uuid] = uuid
+    opts[:data] = body_text
+    opts[:cipher_iv] = body_text_iv
+    opts[:cipher_key] = body_text_key
+    opts
   end
 end

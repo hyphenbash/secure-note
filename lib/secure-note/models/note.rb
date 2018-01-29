@@ -10,6 +10,13 @@ class Note < ActiveRecord::Base
 
   has_secure_password
 
+  def verify_password(password)
+    verified = authenticate password
+    errors.add(:password, 'is invalid') unless verified
+
+    verified
+  end
+
   def protected_body_text
     adapter.read_from_file!
 

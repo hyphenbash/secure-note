@@ -1,9 +1,9 @@
-feature 'Page/Notes Scenarios', fakefs: true do
+feature 'Page/Notes Scenarios', fakefs: false do
   let(:valid_params) {
     {
         title: 'Test Note Title',
         body_text: 'This is a test note body text.',
-        password: 'this is a test password'
+        password: '12345'
     }
   }
 
@@ -20,18 +20,40 @@ feature 'Page/Notes Scenarios', fakefs: true do
   let(:missing_password_error) { "Password can't be blank" }
   let(:wrong_password_error) { "Password is invalid" }
 
-  before do
-    FakeFS { FileUtils.mkdir_p('notes_directory') }
-  end
+  # before do
+  #   FakeFS {
+  #
+  #     # TODO: should get rid of this!
+  #     # Temp Fake - didn't have time for investigation of why
+  #
+  #     app_root = '../../..'
+  #     gems_path = '../../.rvm/gems/ruby-2.3.3/gems'
+  #
+  #     lib_directory = File.expand_path("#{app_root}/lib/secure-note/views", __FILE__)
+  #     FakeFS::FileSystem.clone(lib_directory)
+  #
+  #     %w(
+  #       activesupport-5.1.4/lib/active_support/locale/en.yml
+  #       activemodel-5.1.4/lib/active_model/locale/en.yml
+  #       activerecord-5.1.4/lib/active_record/locale/en.yml
+  #     ).each do |fp|
+  #       file_path = File.expand_path("#{app_root}/#{gems_path}/#{fp}", __FILE__)
+  #
+  #       FakeFS::FileSystem.clone(file_path)
+  #     end
+  #   }
+  # end
 
-  feature 'New' do
+  feature 'Page/New Note' do
     before do
       visit '/secure-notes/new'
     end
 
     context 'when invalid form data was entered' do
       scenario 'submission fails' do
-        fill_post_note_form_and_submit invalid_params
+        fill_post_note_form invalid_params
+
+        click_button 'Submit'
 
         expect(page).to have_content missing_title_error
         expect(page).to have_content missing_body_text_error
@@ -41,23 +63,31 @@ feature 'Page/Notes Scenarios', fakefs: true do
 
     context 'when valid form data was entered' do
       scenario 'submission succeeds' do
-        fill_post_note_form_and_submit valid_params
+        fill_post_note_form valid_params
 
-        expect(page).to have_selector 'h1', text: "Note: \"#{valid_params[:title]}\""
+        click_button 'Submit'
+
+        expect(page).to have_content valid_params[:title]
       end
     end
   end
 
-  feature 'Show' do
+  feature 'Page/Show Note' do
     before do
-      note = create(:note, valid_params)
+      visit '/secure-notes/new'
+      fill_post_note_form valid_params
 
-      visit "/secure-notes/#{note.uuid}"
+      click_button 'Submit'
+
+      visit '/secure-notes'
+      click_link 'View Note'
     end
 
     context 'when invalid form data was entered' do
       scenario 'note access fails' do
-        fill_in_get_note_form_and_submit invalid_params[:password]
+        fill_in_get_note_form invalid_params[:password]
+
+        click_button 'Submit'
 
         expect(page).to have_content wrong_password_error
       end
@@ -65,7 +95,9 @@ feature 'Page/Notes Scenarios', fakefs: true do
 
     context 'when valid form data was entered' do
       scenario 'note access succeeds' do
-        fill_in_get_note_form_and_submit valid_params[:password]
+        fill_in_get_note_form valid_params[:password]
+
+        click_button 'Submit'
 
         expect(page).to have_content valid_params[:title]
         expect(page).to have_content valid_params[:body_text]

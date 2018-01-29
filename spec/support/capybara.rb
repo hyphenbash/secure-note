@@ -4,4 +4,4 @@
 #   Capybara::Poltergeist::Driver.new(app, js_errors: true)
 # end
 #
-# Capybara.javascript_driver = :poltergeist
+# Capybara.current_driver = :poltergeist

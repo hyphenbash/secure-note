@@ -3,7 +3,7 @@ require 'openssl'
 class FileEncryptionAdapter
   class ApiError < RuntimeError; end
 
-  attr_accessor :cipher_key, :cipher_iv
+  attr_reader :cipher_key, :cipher_iv
 
   def initialize(options = {}, algo = 'AES-256-CBC')
     @uuid = options[:uuid]
@@ -45,6 +45,7 @@ class FileEncryptionAdapter
 
   def encrypt_data
     @cipher.encrypt
+
     @cipher_iv = @cipher.random_iv
     @cipher_key = @cipher.random_key
 
@@ -56,7 +57,7 @@ class FileEncryptionAdapter
     encrypted_data
   end
 
-  def decrypt_data(f)
+  def decrypt_data(file)
     @cipher.decrypt
     @cipher.iv = @cipher_iv
     @cipher.key = @cipher_key
@@ -64,7 +65,7 @@ class FileEncryptionAdapter
     buffer = ''
     decrypted_data = ''
 
-    while f.read(4096, buffer)
+    while file.read(4096, buffer)
       decrypted_data = @cipher.update(buffer)
     end
 
@@ -80,7 +81,17 @@ class FileEncryptionAdapter
   end
 
   def check_notes_directory
-    FileUtils.mkdir_p(notes_directory) unless File.directory?(notes_directory)
+    unless File.directory? notes_directory
+      FileUtils.mkdir_p notes_directory
+      note_directory_permissions_and_owner
+    end
+  end
+
+  def note_directory_permissions_and_owner
+    FileUtils.chmod 0700, notes_directory
+    FileUtils.chown ENV['USER'], nil, notes_directory
+  rescue ArgumentError => exc
+    raise adapter::ApiError, exc
   end
 
   def notes_directory

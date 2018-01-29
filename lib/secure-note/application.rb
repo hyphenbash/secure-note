@@ -16,7 +16,7 @@ module SecureNote
     set :database_file, File.expand_path('../../../config/database.yml', __FILE__)
     set :views, File.expand_path('../views', __FILE__)
 
-    configure :production, :development do
+    configure :development, :test do
       enable :logging
     end
 
@@ -36,7 +36,7 @@ module SecureNote
       respond_to do |f|
         if @note.save
           f.html { status :created; slim :get_note_form }
-          f.json { @note.to_json }
+          f.json { @note.protected_body_text }
         else
           f.html { slim :new }
           f.json { @note.errors.to_json }
@@ -53,12 +53,12 @@ module SecureNote
       set_note
 
       respond_to do |f|
-        if @note && @note.authenticate(params[:password])
+        if @note && @note.verify_password(params[:password])
           f.html { slim :note }
-          f.json { @note.to_json }
+          f.json { json @note }
         else
           f.html { status :unauthorized; slim :get_note_form }
-          f.json { @note.errors.to_json }
+          f.json { status :unauthorized; @note.errors.to_json }
         end
       end
     end

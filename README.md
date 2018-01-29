@@ -105,3 +105,11 @@ in that specific order.
 
 #### Automated Tests
 
+Automated tests currently covers the system-wide tests and uses capybara. 
+There's an issue however with FakeFS gem and webrick/rack http, as it seems to break
+the http requests once fakefs is activated. Investigating...
+
+Relevant issues:
+
+- https://github.com/fakefs/fakefs/issues/290
+- https://stackoverflow.com/questions/28769239/fakefs-causing-open-uri-open-to-cause-no-such-file-or-directory-rb-sysopen

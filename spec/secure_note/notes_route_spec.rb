@@ -26,12 +26,30 @@ RSpec.describe SecureNote::Application do
       expect(last_response).to be_ok
     end
 
-    it 'access get password protected note form (/secure-notes/:uuid)' do
+    it 'access get password protected view note form (/secure-notes/:uuid/view)' do
       allow_any_instance_of(Note).to receive(:save_to_file!)
 
       note = create(:note, valid_params)
 
-      get "/secure-notes/#{note.uuid}"
+      get "/secure-notes/#{note.uuid}/view"
+      expect(last_response).to be_ok
+    end
+
+    it 'access get password protected edit note form (/secure-notes/:uuid/edit)' do
+      allow_any_instance_of(Note).to receive(:save_to_file!)
+
+      note = create(:note, valid_params)
+
+      get "/secure-notes/#{note.uuid}/edit"
+      expect(last_response).to be_ok
+    end
+
+    it 'access get password protected remove note form (/secure-notes/:uuid/remove)' do
+      allow_any_instance_of(Note).to receive(:save_to_file!)
+
+      note = create(:note, valid_params)
+
+      get "/secure-notes/#{note.uuid}/remove"
       expect(last_response).to be_ok
     end
   end

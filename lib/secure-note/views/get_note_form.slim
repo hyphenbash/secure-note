@@ -1,5 +1,9 @@
 .container
   .row
+    - unless notice.nil?
+      .alert.alert-warning
+        = notice
+
     - if @note.errors.any?
       .alert.alert-danger
         ul
@@ -11,7 +15,7 @@
 
   .row
     .col-xs-5
-      form method='POST' action="/secure-notes/#{@note.uuid}" role='form'
+      form method='POST' action='/secure-notes/#{@note.uuid}/#{action}' role='form'
         .form-group
           label.control-label for='password' Password
           input.form-control id='password' type='password' name='password' placeholder='Password'

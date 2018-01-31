@@ -2,4 +2,4 @@
   .row
     h1 New Note
 
-    == slim :form
+    == slim :form, :locals => { action: '/secure-notes', method: 'POST' }

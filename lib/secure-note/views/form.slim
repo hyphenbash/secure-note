@@ -5,14 +5,17 @@
         li = error
 
 .col-xs-5
-  form method='POST' action='/secure-notes' role='form'
+  form method='POST' action='#{action}' role='form'
+    input type='hidden' name='_method' value='#{method}'
+
     .form-group
       label.control-label for='title' Title
-      input.form-control id='title' name='title' placeholder='Title'
+      input.form-control id='title' name='title' placeholder='Title' value='#{@note.title}'
 
     .form-group
       label.control-label for='note' Note
       textarea.form-control id='note' rows=5 name='body_text' placeholder='Note'
+        = @note.protected_body_text
 
     .form-group
       label.control-label for='password' Password

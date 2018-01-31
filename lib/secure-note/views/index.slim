@@ -2,20 +2,29 @@
   .row
     h1 Notes
 
+    - unless notice.nil?
+      .alert.alert-warning
+        = notice
+
     table.table-bordered.table-striped.table-responsive.table-hover.table-condensed
       thead
         tr
+          th #
           th Title
           th Action
 
       tbody
-        - @notes.each do |note|
+        - @notes.each_with_index do |note, index|
           tr
-            td.col-xs-6 = note.title.titleize
+            td.col-xs-1 = index + 1
+            td.col-xs-8 = note.title.titleize
             td.col-xs-2
               ul.list-unstyled
                 li
-                  a.btn.btn-info href="/secure-notes/#{note.uuid}" View Note
+                  a.btn.btn-primary href="/secure-notes/#{note.uuid}/view" View Note
                 br
                 li
-                  a.btn.btn-warning href="/secure-notes/#{note.uuid}/edit" Edit Note
+                  a.btn.btn-info href="/secure-notes/#{note.uuid}/edit" Edit Note
+                br
+                li
+                  a.btn.btn-warning href="/secure-notes/#{note.uuid}/remove" Remove Note

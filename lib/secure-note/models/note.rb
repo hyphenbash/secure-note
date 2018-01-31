@@ -3,7 +3,9 @@ class Note < ActiveRecord::Base
 
   after_initialize :set_default_values
   before_save :save_to_file!, :set_encryption_values
-  after_rollback :destroy_saved_file!
+  before_update :save_to_file!, :set_encryption_values
+  after_rollback :destroy_saved_file!, on: [:create]
+  after_destroy :destroy_saved_file!
 
   validates :title, :presence => true
   validates :body_text, :presence => true
@@ -18,7 +20,7 @@ class Note < ActiveRecord::Base
   end
 
   def protected_body_text
-    adapter.read_from_file!
+    adapter.read_from_file! unless self.body_text_key.nil?
 
   rescue adapter.class::ApiError => exc
     logger.error "#{exc.class}: #{exc.message}\n\n#{exc.backtrace.join("\n")}"
@@ -44,8 +46,8 @@ class Note < ActiveRecord::Base
   end
 
   def set_encryption_values
-    self.body_text_iv ||= adapter.cipher_iv
-    self.body_text_key ||= adapter.cipher_key
+    self.body_text_iv = adapter.cipher_iv
+    self.body_text_key = adapter.cipher_key
   end
 
   def adapter

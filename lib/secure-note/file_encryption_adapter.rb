@@ -83,11 +83,11 @@ class FileEncryptionAdapter
   def check_notes_directory
     unless File.directory? notes_directory
       FileUtils.mkdir_p notes_directory
-      note_directory_permissions_and_owner
+      note_directory_perms
     end
   end
 
-  def note_directory_permissions_and_owner
+  def note_directory_perms
     FileUtils.chmod 0700, notes_directory
     FileUtils.chown ENV['USER'], nil, notes_directory
   rescue ArgumentError => exc

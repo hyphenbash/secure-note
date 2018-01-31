@@ -1,0 +1,17 @@
+.container
+  .row
+    h1 Remove Note
+
+  .row
+    h3 Note Title
+    p = @note.title
+
+  .row
+    h3 Note Body
+    p = @note.protected_body_text
+
+  .row
+    form method='POST' action="/secure-notes/#{@note.uuid}" role='form' onsubmit="return confirm('Are you sure?');"
+      input type='hidden' name='_method' value='DELETE'
+      a.btn.btn-default href="/secure-notes" Cancel
+      button.btn.btn-warning Delete Note

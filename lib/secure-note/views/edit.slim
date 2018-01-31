@@ -1,0 +1,5 @@
+.container
+  .row
+    h1 Edit Note
+
+    == slim :form, :locals => { action: "/secure-notes/#{@note.uuid}", method: 'PATCH' }

@@ -6,6 +6,8 @@ class CreateNotes < ActiveRecord::Migration[5.1]
       t.string :password_digest, null: false
       t.binary :body_text_key, null: false
       t.binary :body_text_iv, null: false
+
+      t.timestamps
     end
   end
 end

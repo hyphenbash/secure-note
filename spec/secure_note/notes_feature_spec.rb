@@ -238,7 +238,7 @@ feature 'Page/Notes Scenarios', fakefs: true do
       click_button 'Submit'
     end
 
-    scenario 'when note is destroyed successfully' do
+    scenario 'note is destroyed successfully' do
       click_button 'Delete Note'
 
       within 'table' do

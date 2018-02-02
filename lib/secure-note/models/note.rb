@@ -10,6 +10,8 @@ class Note < ActiveRecord::Base
   validates :title, :presence => true
   validates :body_text, :presence => true
 
+  scope :titles, -> { select(:uuid, :title) }
+
   has_secure_password
 
   def verify_password(password)

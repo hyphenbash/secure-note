@@ -4,6 +4,10 @@ class NoteSerializer < ActiveModel::Serializer
              :body_text
 
   def body_text
-    object.protected_body_text
+    unless object.body_text.nil?
+      object.protected_body_text
+    else
+      "[PROTECTED]"
+    end
   end
 end

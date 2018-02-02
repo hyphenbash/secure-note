@@ -20,8 +20,6 @@ module SecureNote
     set :views, File.expand_path('../views', __FILE__)
     set :serializers_path, File.expand_path('../serializers', __FILE__)
 
-    set :active_model_serializers, { root: false }
-
     enable :sessions
 
     configure :development, :test do
@@ -41,11 +39,14 @@ module SecureNote
     end
 
     get '/secure-notes' do
-      @notes = Note.all
+      @notes = Note.titles
       notice = session[:notice]
       session[:notice] = nil
 
-      slim :index, :locals => { notice: notice }
+      respond_to do |f|
+        f.html { status :ok; slim :index, :locals => { notice: notice } }
+        f.json { status :ok; json @notes, { root: :data } }
+      end
     end
 
     get '/secure-notes/new' do
